@@ -3,19 +3,17 @@ cmake_minimum_required(VERSION 3.10.0)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch Version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(async VERSION ${PROJECT_VERSION} LANGUAGES C CXX)
+project(join_server VERSION ${PROJECT_VERSION} LANGUAGES C CXX)
 
 option(WITH_GTEST_TEST "Whether to build GTEST test" ON)
 
 configure_file(version.h.in version.h)
 
-
-find_package(Boost COMPONENTS system REQUIRED)
+find_package(Boost REQUIRED)
 find_package(Threads)
 find_package(GTest)
 
-include_directories(${GTEST_INCLUDE_DIR})
-include_directories(${BOOST_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(join_server
     src/main.cpp
@@ -33,9 +31,8 @@ set_target_properties(join_server PROPERTIES
         CXX_STANDARD_REQUIRED ON
         )
 
-target_link_libraries(join_server
-        ${Boost_LIBRARIES}
-        ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(join_server PRIVATE
+        ${Boost_LIBRARIES})
 
 if(WITH_GTEST_TEST) 
     set_target_properties(unit_tests PROPERTIES
