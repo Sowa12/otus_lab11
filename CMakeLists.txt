@@ -9,6 +9,14 @@ option(WITH_GTEST_TEST "Whether to build GTEST test" ON)
 
 configure_file(version.h.in version.h)
 
+
+find_package(Boost COMPONENTS system REQUIRED)
+find_package(Threads)
+find_package(GTest)
+
+include_directories(${GTEST_INCLUDE_DIR})
+include_directories(${BOOST_INCLUDE_DIR})
+
 add_executable(join_server
     src/main.cpp
     src/command_parser.cpp
